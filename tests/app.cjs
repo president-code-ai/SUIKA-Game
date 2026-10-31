@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const {readFileSync}=require('node:fs');
 const {join}=require('node:path');
 const vm=require('node:vm');
-const html=readFileSync(join(__dirname,'../SUIKA.html'),'utf8');
+const html=readFileSync(join(__dirname,'../index.html'),'utf8');
 function setup(reduced=false){
   const listeners=new Map(),elements=new Map(),frames=[];let world,drawCalls=0;
   const context=new Proxy({}, {get(target,key){if(key==='createRadialGradient')return ()=>({addColorStop(){}});if(key==='measureText')return ()=>({width:10});if(key in target)return target[key];return (...args)=>{for(const a of args)if(typeof a==='number')assert.ok(Number.isFinite(a),`${String(key)} receives finite coordinates`);if(key==='ellipse'||key==='arc')assert.ok(args[2]>=0);drawCalls++;};},set(t,k,v){t[k]=v;return true;}});

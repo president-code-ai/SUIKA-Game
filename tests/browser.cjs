@@ -38,7 +38,7 @@ async function main(){
     const click=async selector=>{const rect=await evaluate(`(()=>{const r=document.querySelector(${JSON.stringify(selector)}).getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height/2};})()`);await c('Input.dispatchMouseEvent',{type:'mousePressed',button:'left',clickCount:1,...rect});await c('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...rect});};
     const key=async (key,code)=>{await c('Input.dispatchKeyEvent',{type:'keyDown',key,code});await c('Input.dispatchKeyEvent',{type:'keyUp',key,code});};
     const screenshot=async name=>{const {data}=await c('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(out,name),Buffer.from(data,'base64'));};
-    await c('Page.navigate',{url:pathToFileURL(path.join(root,'SUIKA.html')).href});await until(()=>evaluate(`typeof __world!=='undefined'&&document.getElementById('evolution').children.length===11`));
+    await c('Page.navigate',{url:pathToFileURL(path.join(root,'index.html')).href});await until(()=>evaluate(`typeof __world!=='undefined'&&document.getElementById('evolution').children.length===11`));
     assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);assert.equal((await snapshot()).hidden,true);await screenshot('desktop-start.png');
     // Genuine mouse input, gravity, contact and merge.
     await click('#game');await sleep(650);await click('#game');await until(async()=>(await snapshot()).score===3);assert.equal((await snapshot()).count,1);

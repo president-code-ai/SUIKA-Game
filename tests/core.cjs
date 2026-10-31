@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const {readFileSync}=require('node:fs');
 const {join}=require('node:path');
 const vm=require('node:vm');
-const html=readFileSync(join(__dirname,'../SUIKA.html'),'utf8');
+const html=readFileSync(join(__dirname,'../index.html'),'utf8');
 const code=html.match(/<script id="suika-core">([\s\S]*?)<\/script>/)[1];
 const sandbox={};vm.runInNewContext(code,sandbox);
 const {World,C,FRUITS}=sandbox.SuikaCore;
