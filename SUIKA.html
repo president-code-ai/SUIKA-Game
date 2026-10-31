@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <meta name="color-scheme" content="light">
+  <title>SUIKA — ころころ、育てよう。</title>
+  <style>
+    :root{--ink:#284b36;--muted:#78816c;--cream:#fbf9ed;--green:#34764a;--lime:#e6f2ac;--orange:#ed9156;--line:#e2e5d4}
+    *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:"Segoe UI","Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif}button{font:inherit;cursor:pointer}button:focus-visible,canvas:focus-visible{outline:3px solid #dc7c36;outline-offset:5px}button{touch-action:manipulation}button:disabled{cursor:default;opacity:.45}
+    .page{max-width:1100px;margin:0 auto;padding:26px 34px 20px}.topbar{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:18px}.brand{font-weight:850;letter-spacing:.14em;font-size:20px;display:flex;align-items:center;gap:10px}.brandmark{display:inline-flex;width:29px;height:29px;align-items:center;justify-content:center;border-radius:50%;background:#dbeab7;font-size:18px}.badge{font-size:11px;letter-spacing:.1em;color:var(--muted);display:flex;align-items:center;gap:8px}.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:#679d52}
+    main{display:grid;grid-template-columns:245px minmax(280px,420px) 195px;gap:35px;align-items:start;justify-content:center;margin:30px auto 0}.intro{padding-top:21px}.eyebrow{font-size:10px;font-weight:750;letter-spacing:.23em;color:#909a76;margin:0 0 17px}h1{font-size:41px;line-height:1.32;letter-spacing:-.055em;margin:0 0 15px;font-weight:850}h1 span{color:var(--green)}.lead{font-size:12px;line-height:1.95;color:var(--muted);margin:0 0 25px}.scorecard{border:1px solid var(--line);border-radius:20px;background:#fffef6;padding:19px 21px;margin-bottom:14px}.scorelabel{font-size:10px;font-weight:750;letter-spacing:.18em;color:var(--muted)}#score{font-size:49px;font-weight:800;letter-spacing:-.06em;line-height:1.2;font-variant-numeric:tabular-nums;margin:6px 0 13px}.bestrow{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;color:var(--muted);font-size:10px}.bestrow strong{font-size:16px;color:var(--ink);font-variant-numeric:tabular-nums}.controls{display:flex;gap:7px;flex-wrap:wrap}.smallbutton{border:1px solid var(--line);border-radius:11px;background:#fffef7;color:var(--ink);padding:10px 11px;font-size:11px;transition:background .15s}.smallbutton:hover{background:var(--lime)}.tip{padding:17px 0;font-size:11px;line-height:1.9;color:var(--muted)}kbd{display:inline-block;background:#f1f0df;border:1px solid #e0e2ce;border-bottom-width:2px;padding:0 5px;border-radius:4px;font:10px monospace;color:#637057}.tip p{margin:4px 0}.quiet{font-size:10px;color:#939b85}
+    .gamecolumn{min-width:0}.gamebar{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px;min-height:28px}.gamebar .eyebrow{margin:0;font-size:10px}.nextbox{display:flex;align-items:center;gap:10px;font-size:10px;font-weight:750;letter-spacing:.12em;color:var(--muted)}#next{width:35px;height:35px;background:#fffef8;border:1px solid var(--line);border-radius:50%}.board{position:relative;border:1px solid #dce3c7;border-radius:23px;background:#f0f3dc;padding:7px;box-shadow:0 10px 0 -5px #e4e8cf,0 22px 40px -27px #69865555}#game{display:block;width:100%;height:auto;aspect-ratio:420/620;border-radius:17px;touch-action:none;cursor:crosshair;user-select:none}.status{height:27px;display:flex;justify-content:center;align-items:center;font-size:10px;color:var(--muted);margin-top:13px;letter-spacing:.035em}.status .dot{height:5px;width:5px;background:#80a353;border-radius:50%;margin-right:7px}.overlay{position:absolute;inset:7px;border-radius:17px;background:#f9f9ebdf;backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;z-index:2;padding:25px;text-align:center}.overlay[hidden]{display:none}.modal{width:100%;max-width:290px}.modalicon{font-size:40px;margin-bottom:14px}.modal h2{font-size:27px;letter-spacing:-.04em;margin:0 0 12px}.modal p{font-size:13px;line-height:1.8;color:var(--muted);white-space:pre-line;margin:0 0 24px}.primary{display:block;width:100%;border:0;border-radius:14px;background:var(--green);color:#fffdf0;font-weight:700;font-size:14px;padding:15px 20px;box-shadow:0 4px 0 #255b37}.primary:hover{background:#28613c}.secondary{margin-top:12px;border:0;background:transparent;color:var(--muted);padding:12px;font-size:12px}
+    .guide{padding-top:21px}.guide h2{font-size:13px;margin:0 0 5px}.guide .sub{font-size:10px;color:var(--muted);line-height:1.8;margin:0 0 17px}.evolution{position:relative;display:grid;gap:4px}.fruitrow{display:flex;align-items:center;gap:12px;min-height:39px;position:relative}.fruitrow:before{content:"";position:absolute;left:17px;top:33px;height:13px;border-left:1px dashed #c8d3ab}.fruitrow:last-child:before{display:none}.fruitrow canvas{width:35px;height:35px;flex:none}.fruitrow .name{font-size:11px;color:#6e7b61}.fruitrow .level{font-size:9px;color:#a1ab91;margin-left:auto;font-variant-numeric:tabular-nums}.fruitrow:last-child .name{color:var(--green);font-weight:800}.goalnote{margin-top:19px;padding:13px 15px;background:#eaf0d1;border-radius:12px;font-size:10px;line-height:1.8;color:#74825c}.goalnote strong{color:#4e6b3b}.footer{border-top:1px solid var(--line);margin-top:33px;padding-top:16px;display:flex;justify-content:space-between;font-size:9px;letter-spacing:.08em;color:#929981}.sr{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(min-width:1100px){.page{padding-top:29px}main{gap:40px;margin-top:36px}.intro,.guide{padding-top:25px}}
+    @media(max-width:960px){.page{padding:20px 22px}main{grid-template-columns:190px minmax(280px,400px);gap:25px}.guide{grid-column:1/-1;padding-top:0}.evolution{display:flex;justify-content:space-between;gap:3px}.fruitrow{flex-direction:column;gap:3px;min-width:0}.fruitrow:before,.fruitrow .level{display:none}.fruitrow .name{font-size:8px}.goalnote{margin-top:13px}.guide h2{margin-bottom:4px}.guide .sub{margin-bottom:10px}.intro{padding-top:15px}h1{font-size:34px}}
+    @media(max-width:570px){.page{padding:15px 14px 18px}.topbar{padding-bottom:12px}.brand{font-size:16px}.badge{font-size:8px}main{display:flex;flex-direction:column;gap:15px;margin-top:16px;align-items:stretch;max-width:420px}.intro{padding:0;display:grid;grid-template-columns:1fr auto;gap:5px 12px}.intro .eyebrow,.lead,.tip{display:none}h1{font-size:23px;line-height:1.35;align-self:center;margin:0}h1 br{display:none}.scorecard{grid-column:2;grid-row:1/3;padding:9px 14px;margin:0;min-width:118px;border-radius:13px}.scorelabel{font-size:8px}#score{font-size:30px;margin:1px 0 4px}.bestrow{font-size:8px;padding-top:5px;gap:10px}.bestrow strong{font-size:11px}.controls{grid-column:1;align-self:end;gap:5px}.smallbutton{padding:7px 8px;font-size:9px;border-radius:8px}.gamebar{margin-bottom:8px;min-height:23px}.nextbox{font-size:9px}#next{width:29px;height:29px}.board{border-radius:20px;padding:5px}.overlay{inset:5px}.status{margin-top:8px;font-size:9px;height:18px}.guide{padding-top:0}.guide h2{font-size:11px}.guide .sub,.goalnote{display:none}.fruitrow canvas{width:27px;height:27px}.fruitrow .name{font-size:6px;letter-spacing:-.05em}.footer{margin-top:18px;font-size:8px;gap:15px;line-height:1.6}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}.overlay{backdrop-filter:none}}
+  </style>
+</head>
+<body>
+<div class="page">
+  <header class="topbar"><div class="brand"><span class="brandmark" aria-hidden="true">◔</span>SUIKA</div><div class="badge">OFFLINE LITTLE GAME</div></header>
+  <main>
+    <section class="intro" aria-label="スコアと操作">
+      <p class="eyebrow">A LITTLE DROP, A BIG DELIGHT.</p>
+      <h1>ころころ、<br><span>育てよう。</span></h1>
+      <p class="lead">おなじ果物を、くっつけて。<br>小さなひと粒から、大きなスイカへ。<br>のんびり、でもちょっと夢中に。</p>
+      <div class="scorecard"><div class="scorelabel">SCORE</div><div id="score">0</div><div class="bestrow"><span>このタブのベスト</span><strong id="best">0</strong></div></div>
+      <div class="controls"><button class="smallbutton" id="pause" type="button">Ⅱ 一時停止</button><button class="smallbutton" id="restart" type="button">↻ やり直す</button><button class="smallbutton" id="sound" type="button" aria-pressed="false">♪ 音 OFF</button></div>
+      <div class="tip"><p>マウスで位置を決め、クリック。</p><p>タッチは、指を離すと落ちます。</p><p><kbd>←</kbd> <kbd>→</kbd> 移動　<kbd>Space</kbd> 落とす</p><p><kbd>P</kbd> / <kbd>Esc</kbd> 一時停止</p><p class="quiet">赤い線を越えたままだと終了です。</p></div>
+    </section>
+    <section class="gamecolumn" aria-label="ゲーム">
+      <div class="gamebar"><p class="eyebrow" id="board-label">LET'S GROW A WATERMELON</p><div class="nextbox">NEXT <canvas id="next" width="70" height="70" role="img" aria-label="次の果物"></canvas></div></div>
+      <div class="board">
+        <canvas id="game" width="840" height="1240" tabindex="0" role="application" aria-label="果物を落とすゲーム。左右キーで位置を選び、スペースかエンターで落とします。Pで一時停止。" aria-describedby="instructions"></canvas>
+        <div class="overlay" id="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-text"><div class="modal"><div class="modalicon" id="modal-icon" aria-hidden="true">◔</div><h2 id="modal-title"></h2><p id="modal-text"></p><button class="primary" id="modal-primary" type="button"></button><button class="secondary" id="modal-secondary" type="button" hidden>ゲームに戻る</button></div></div>
+      </div>
+      <div class="status"><span class="dot" aria-hidden="true"></span><span id="status">位置を決めて、最初のひと粒を落とそう。</span></div>
+      <p id="instructions" class="sr">同じ果物が触れると次の果物に進化します。赤い線を約2秒越えるとゲーム終了です。マウスはクリック、タッチは指を離して落とします。キーボードは左右で移動、スペースかエンターで落とします。</p>
+      <div id="announce" class="sr" role="status" aria-live="polite"></div>
+    </section>
+    <aside class="guide"><p class="eyebrow">THE FRUIT FAMILY</p><h2>小さなひと粒の、その先。</h2><p class="sub">同じ果物が出会うと、ひとつ成長。</p><div class="evolution" id="evolution"></div><div class="goalnote">目指すは、いちばん大きな<strong>スイカ</strong>。<br>すき間を見つけて、やさしくポトン。</div></aside>
+  </main>
+  <footer class="footer"><span>ひと息ついたら、もうひと粒。</span><span>通信なし · インストール不要 · 記録はこのタブの間だけ</span></footer>
+</div>
+<script id="suika-core">
+'use strict';
+(() => {
+  const FRUITS = Object.freeze([
+    ['さくらんぼ',13,'#ed6672','#b8324b'],['いちご',18,'#fa7b78','#c74a55'],['ぶどう',24,'#a68acf','#715799'],
+    ['みかん',30,'#ffb459','#df8a32'],['かき',38,'#f99a58','#d87535'],['りんご',46,'#ee7474','#ce4c59'],
+    ['なし',55,'#e4d968','#b6b448'],['もも',64,'#f5a5b4','#dc7f96'],['パイナップル',74,'#f1c45b','#cba044'],
+    ['メロン',84,'#c6db8e','#91b166'],['スイカ',96,'#75b875','#438353']
+  ].map(([name,r,color,edge],level)=>Object.freeze({name,r,color,edge,level,points:(level+1)*(level+2)/2})));
+  const C = Object.freeze({width:420,height:620,left:24,right:396,bottom:589,line:129,spawnY:57,dt:1/120,gravity:1050,cooldown:.48,dangerTime:2.1,maxBodies:120});
+  const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
+  class World {
+    constructor(random=Math.random){this.random=random;this.reset();}
+    pick(){const n=this.random();return Math.min(4,Math.floor(clamp(Number.isFinite(n)?n:0,0,.999999)*5));}
+    reset(){this.bodies=[];this.score=0;this.current=this.pick();this.next=this.pick();this.cooldown=0;this.time=0;this.danger=0;this.over=false;this.id=0;this.events=[];this.watermelons=0;}
+    body(level,x,y){const f=FRUITS[level];return {id:++this.id,level,r:f.r,x,y,vx:0,vy:0,age:0,angle:0,spin:0};}
+    drop(x){if(this.over||this.cooldown>0||this.bodies.length>=C.maxBodies||!Number.isFinite(x))return false;const f=FRUITS[this.current];this.bodies.push(this.body(this.current,clamp(x,C.left+f.r,C.right-f.r),C.spawnY));this.current=this.next;this.next=this.pick();this.cooldown=C.cooldown;return true;}
+    merge(a,b){
+      const level=a.level+1,r=FRUITS[level].r;
+      const n=this.body(level,clamp((a.x+b.x)/2,C.left+r,C.right-r),Math.min((a.y+b.y)/2,C.bottom-r));
+      n.vx=(a.vx+b.vx)*.3;n.vy=Math.min(0,(a.vy+b.vy)*.25);n.age=Math.min(a.age,b.age);n.angle=(a.angle+b.angle)/2;
+      this.bodies=this.bodies.filter(v=>v!==a&&v!==b);this.bodies.push(n);this.score+=FRUITS[level].points;
+      if(level===10)this.watermelons++;
+      this.events.push({x:n.x,y:n.y,level,points:FRUITS[level].points,watermelon:level===10});return n;
+    }
+    step(dt=C.dt){
+      if(this.over||!Number.isFinite(dt)||dt<=0)return;dt=Math.min(dt,1/30);this.time+=dt;this.cooldown=Math.max(0,this.cooldown-dt);
+      for(const b of this.bodies){b.age+=dt;b.vy+=C.gravity*dt;b.vx*=.999;b.x+=b.vx*dt;b.y+=b.vy*dt;b.angle+=b.spin*dt;b.spin*=.985;}
+      const merged=new Set();
+      for(let pass=0;pass<8;pass++){
+        for(const b of this.bodies){
+          if(b.x-b.r<C.left){b.x=C.left+b.r;if(b.vx<0)b.vx*=-.12;}
+          if(b.x+b.r>C.right){b.x=C.right-b.r;if(b.vx>0)b.vx*=-.12;}
+          if(b.y+b.r>C.bottom){b.y=C.bottom-b.r;if(b.vy>0)b.vy*=-.07;b.vx*=.98;b.spin=b.vx/b.r*.3;}
+        }
+        let mergePair=null;
+        for(let i=0;i<this.bodies.length;i++)for(let j=i+1;j<this.bodies.length;j++){
+          const a=this.bodies[i],b=this.bodies[j],dx=b.x-a.x,dy=b.y-a.y,sum=a.r+b.r,d2=dx*dx+dy*dy;
+          if(d2>sum*sum)continue;
+          if(a.level===b.level&&a.level<10&&!merged.has(a.id)&&!merged.has(b.id)){if(!mergePair)mergePair=[a,b];continue;}
+          const dist=Math.sqrt(d2),nx=dist>.00001?dx/dist:((a.id%2)?1:-1),ny=dist>.00001?dy/dist:0;
+          const ia=1/(a.r*a.r),ib=1/(b.r*b.r),inv=ia+ib,correction=Math.max(0,sum-dist-.035)*.85/inv;
+          a.x-=nx*correction*ia;a.y-=ny*correction*ia;b.x+=nx*correction*ib;b.y+=ny*correction*ib;
+          const rv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+          if(rv<0){const impulse=-rv*1.04/inv;a.vx-=impulse*nx*ia;a.vy-=impulse*ny*ia;b.vx+=impulse*nx*ib;b.vy+=impulse*ny*ib;
+            const tx=-ny,ty=nx,friction=clamp(-((b.vx-a.vx)*tx+(b.vy-a.vy)*ty)/inv,-impulse*.13,impulse*.13);
+            a.vx-=friction*tx*ia;a.vy-=friction*ty*ia;b.vx+=friction*tx*ib;b.vy+=friction*ty*ib;
+          }
+        }
+        if(mergePair){const n=this.merge(...mergePair);merged.add(n.id);}
+      }
+      // Re-clamp after the final contact pass, which can push a body into a wall.
+      for(const b of this.bodies){b.x=clamp(b.x,C.left+b.r,C.right-b.r);b.y=Math.min(b.y,C.bottom-b.r);}
+      const crowded=this.bodies.some(b=>b.age>1.35&&b.y-b.r<C.line);
+      this.danger=crowded?this.danger+dt:Math.max(0,this.danger-dt*2);
+      if(this.danger>=C.dangerTime||this.bodies.length>=C.maxBodies){this.over=true;this.events.push({over:true});}
+    }
+  }
+  globalThis.SuikaCore=Object.freeze({FRUITS,C,World,clamp});
+})();
+</script>
+<script id="suika-app">
+'use strict';
+(() => {
+  const {FRUITS,C,World,clamp}=SuikaCore;
+  const $=id=>document.getElementById(id),canvas=$('game'),ctx=canvas.getContext('2d'),nextctx=$('next').getContext('2d');
+  if(!ctx||!nextctx){$('status').textContent='このブラウザはCanvasに対応していません。新しいブラウザで開いてください。';return;}
+  const world=new World(),reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let state='playing',aim=210,best=0,last=0,accumulator=0,pointer=null,particles=[],labels=[],sound=false,audio=null,modalAction=null,returnState='playing';
+  let heldLeft=false,heldRight=false,previewClock=0;
+  function ellipse(g,x,y,rx,ry,fill){g.beginPath();g.ellipse(x,y,rx,ry,0,0,Math.PI*2);if(fill){g.fillStyle=fill;g.fill();}}
+  function fruit(g,level,x,y,r,angle=0,alpha=1){
+    const f=FRUITS[level];g.save();g.globalAlpha=alpha;g.translate(x,y);g.rotate(angle);
+    g.fillStyle='#314e2214';ellipse(g,1,r*.19,r*.96,r*.86);g.fill();
+    const grad=g.createRadialGradient(-r*.34,-r*.42,r*.06,0,0,r);grad.addColorStop(0,f.color);grad.addColorStop(1,f.edge);
+    ellipse(g,0,0,r,r,grad);g.lineWidth=Math.max(1,r*.022);g.strokeStyle=f.edge;g.stroke();
+    g.save();ellipse(g,0,0,r*.96,r*.96);g.clip();
+    if(level===1){g.fillStyle='#ffe9a7';for(let i=0;i<9;i++){const yy=(-.55+(i/3|0)*.43)*r,xx=((i%3)-1)*r*.43;ellipse(g,xx,yy,r*.045,r*.075);g.fill();}}
+    if(level===2){for(const [xx,yy] of [[-.36,-.3],[.32,-.35],[-.48,.28],[.2,.35]]){ellipse(g,xx*r,yy*r,r*.37,r*.36,'#ffffff16');g.strokeStyle='#75509c44';g.stroke();}}
+    if(level===8){g.strokeStyle='#bc8b3866';g.lineWidth=1.4;for(let i=-3;i<=3;i++){g.beginPath();g.moveTo(-r,r*i*.4-r);g.lineTo(r,r*i*.4+r);g.stroke();g.beginPath();g.moveTo(-r,r*i*.4+r);g.lineTo(r,r*i*.4-r);g.stroke();}}
+    if(level===9){g.strokeStyle='#f1f5c1a0';g.lineWidth=Math.max(1,r*.024);for(let i=-3;i<=3;i++){g.beginPath();g.moveTo(-r,r*i*.34-r);g.lineTo(r,r*i*.34+r);g.stroke();g.beginPath();g.moveTo(-r,r*i*.34+r);g.lineTo(r,r*i*.34-r);g.stroke();}}
+    if(level===10){g.strokeStyle='#35794eb0';g.lineWidth=r*.105;for(let i=-2;i<=2;i++){g.beginPath();g.moveTo(i*r*.38,-r);g.bezierCurveTo(i*r*.33-r*.17,-r*.3,i*r*.33+r*.17,r*.3,i*r*.38,r);g.stroke();}}
+    if(level===7){g.strokeStyle='#d8779080';g.lineWidth=1.6;g.beginPath();g.moveTo(r*.07,-r);g.bezierCurveTo(-r*.2,-r*.4,r*.27,r*.4,r*.03,r);g.stroke();}
+    g.restore();ellipse(g,-r*.35,-r*.42,r*.23,r*.12,'#ffffff38');
+    if(level===0){g.strokeStyle='#527b44';g.lineWidth=2;g.beginPath();g.moveTo(0,-r*.9);g.quadraticCurveTo(r*.05,-r*1.32,r*.35,-r*1.38);g.stroke();}
+    if([1,3,4,5,6,7,8,9,10].includes(level)){
+      g.strokeStyle='#64864b';g.lineWidth=Math.max(1.8,r*.065);g.beginPath();g.moveTo(0,-r*.9);g.lineTo(r*.05,-r*1.12);g.stroke();
+      if(level===8){g.fillStyle='#74984b';for(let i=-1;i<=1;i++){g.beginPath();g.moveTo(0,-r*.9);g.lineTo((i*.32-.11)*r,-r*(i===0?1.36:1.22));g.lineTo((i*.3+.14)*r,-r*1.03);g.fill();}}
+      else{g.save();g.translate(r*.18,-r*.98);g.rotate(-.32);ellipse(g,0,0,r*.22,r*.09,'#668e4e');g.restore();}
+    }
+    const eyeY=r*.15,eyeX=r*.23;g.fillStyle='#3b4035';ellipse(g,-eyeX,eyeY,Math.max(1.2,r*.038),Math.max(1.7,r*.053));g.fill();ellipse(g,eyeX,eyeY,Math.max(1.2,r*.038),Math.max(1.7,r*.053));g.fill();
+    g.lineWidth=Math.max(1,r*.026);g.strokeStyle='#4b4436';g.beginPath();g.arc(0,r*.2,r*.105,0,Math.PI);g.stroke();ellipse(g,-r*.4,r*.28,r*.11,r*.06,'#faaf9b66');ellipse(g,r*.4,r*.28,r*.11,r*.06,'#faaf9b66');g.restore();
+  }
+  function next(){nextctx.clearRect(0,0,70,70);fruit(nextctx,world.next,35,39,23);$('next').setAttribute('aria-label',`次の果物：${FRUITS[world.next].name}`);canvas.setAttribute('aria-label',`現在の果物：${FRUITS[world.current].name}。左右キーで位置を選び、スペースかエンターで落とします。Pで一時停止。`);}
+  function updateScore(){best=Math.max(best,world.score);$('score').textContent=world.score.toLocaleString('ja-JP');$('best').textContent=best.toLocaleString('ja-JP');}
+  function ensureAudio(){if(!sound)return;try{if(!audio){const A=window.AudioContext||window.webkitAudioContext;if(A)audio=new A();}if(audio?.state==='suspended')audio.resume().catch(()=>{});}catch{sound=false;updateSound();}}
+  function updateSound(){$('sound').textContent=sound?'♪ 音 ON':'♪ 音 OFF';$('sound').setAttribute('aria-pressed',String(sound));}
+  function tone(level){if(!sound||!audio||audio.state!=='running')return;try{const t=audio.currentTime,o=audio.createOscillator(),g=audio.createGain();o.type='sine';o.frequency.setValueAtTime(270*Math.pow(1.13,level),t);o.frequency.exponentialRampToValueAtTime(540*Math.pow(1.1,level),t+.10);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.055,t+.01);g.gain.exponentialRampToValueAtTime(.001,t+.2);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.22);o.onended=()=>{o.disconnect();g.disconnect();};}catch{}}
+  function releaseInput(){heldLeft=false;heldRight=false;if(pointer!==null){try{canvas.releasePointerCapture(pointer);}catch{}pointer=null;}}
+  function showModal(kind){
+    releaseInput();returnState=state;state=kind;accumulator=0;$('overlay').hidden=false;canvas.setAttribute('aria-disabled','true');canvas.tabIndex=-1;$('pause').disabled=true;$('restart').disabled=true;
+    const gameover=kind==='over',restart=kind==='restart';
+    $('modal-title').textContent=gameover?'また、ひと粒から。':restart?'はじめから遊ぶ？':'ちょっと、ひと休み。';
+    $('modal-icon').textContent=gameover?'◔':restart?'↻':'☕';
+    $('modal-text').textContent=gameover?`今回のスコアは ${world.score.toLocaleString('ja-JP')} 点。\n${world.watermelons?'スイカができたね。おめでとう！':'次は、もっと大きく育つかも。'}`:restart?'今のゲームを終えて、\nスコア0からスタートします。':'果物たちも、のんびり待っています。';
+    $('modal-primary').textContent=gameover?'もう一度あそぶ':restart?'はじめから遊ぶ':'つづける';$('modal-secondary').hidden=!restart;
+    modalAction=(gameover||restart)?newGame:resume;$('modal-primary').focus({preventScroll:true});
+  }
+  function resume(){if(world.over)return;state='playing';$('overlay').hidden=true;canvas.removeAttribute('aria-disabled');canvas.tabIndex=0;$('pause').disabled=false;$('restart').disabled=false;accumulator=0;last=0;canvas.focus({preventScroll:true});}
+  function newGame(){world.reset();particles=[];labels=[];aim=210;updateScore();next();resume();$('status').textContent='位置を決めて、最初のひと粒を落とそう。';$('announce').textContent='新しいゲームを始めました。';}
+  function drop(){if(state!=='playing')return;ensureAudio();if(world.drop(aim)){next();$('status').textContent='おなじ果物どうしを、くっつけよう。';}}
+  function processEvents(){for(const e of world.events.splice(0)){
+    if(e.over){showModal('over');$('announce').textContent=`ゲーム終了。スコアは${world.score}点です。`;continue;}
+    updateScore();tone(e.level);$('announce').textContent=`${FRUITS[e.level].name}に成長。スコア${world.score}点。`;
+    if(!reduced){labels.push({x:e.x,y:e.y,t:.85,text:`+${e.points}`,big:e.watermelon});for(let i=0;i<9;i++){const a=Math.PI*2*i/9;particles.push({x:e.x,y:e.y,vx:Math.cos(a)*90,vy:Math.sin(a)*90,t:.5,color:FRUITS[e.level].color});}}
+    if(e.watermelon){$('status').textContent='スイカになった！ おめでとう。まだまだ遊べます。';}
+  }particles=particles.slice(-180);labels=labels.slice(-20);}
+  function rounded(g,x,y,w,h,r,fill){g.beginPath();g.roundRect(x,y,w,h,r);g.fillStyle=fill;g.fill();}
+  function draw(){
+    ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,C.width,C.height);rounded(ctx,0,0,420,620,17,'#fdfcf1');
+    ctx.save();rounded(ctx,C.left,101,C.right-C.left,C.bottom-101,12,'#f9f8e9');
+    ctx.fillStyle='#e9ecd5';for(let x=40;x<396;x+=23)for(let y=151;y<589;y+=23){ctx.beginPath();ctx.arc(x,y,.8,0,Math.PI*2);ctx.fill();}
+    const warning=world.danger>0;ctx.strokeStyle=warning?'#e57764':'#dea795';ctx.lineWidth=warning?1.8:1;ctx.setLineDash([4,5]);ctx.beginPath();ctx.moveTo(C.left+5,C.line);ctx.lineTo(C.right-5,C.line);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle=warning?'#d5755c':'#b9a18b';ctx.font='9px "Segoe UI",sans-serif';ctx.textAlign='right';ctx.fillText(warning?'あと少し！ 合体でスペースをつくろう':'ここを越えないように',C.right-8,C.line-10);
+    if(warning){ctx.fillStyle='#e5947120';ctx.fillRect(C.left,C.line-20,C.right-C.left,20);}
+    for(const b of world.bodies)fruit(ctx,b.level,b.x,b.y,b.r,b.angle);
+    if(state==='playing'&&!world.over){const f=FRUITS[world.current],x=clamp(aim,C.left+f.r,C.right-f.r),ready=world.cooldown<=0;
+      if(ready){let target=C.bottom-f.r;for(const b of world.bodies){const dx=x-b.x,rr=b.r+f.r;if(Math.abs(dx)<rr)target=Math.min(target,b.y-Math.sqrt(rr*rr-dx*dx));}
+        ctx.strokeStyle='#9ba87177';ctx.setLineDash([3,6]);ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,C.spawnY+f.r+7);ctx.lineTo(x,Math.max(C.spawnY+f.r+7,target));ctx.stroke();ctx.setLineDash([]);
+        ctx.beginPath();ctx.ellipse(x,C.bottom+9,Math.max(8,f.r*.65),2,0,0,Math.PI*2);ctx.fillStyle='#72915230';ctx.fill();}
+      fruit(ctx,world.current,x,C.spawnY+(reduced?0:Math.sin(previewClock*2)*1.2),f.r,0,ready?1:.3);
+    }
+    for(const p of particles){ctx.globalAlpha=Math.max(0,p.t*2);ellipse(ctx,p.x,p.y,2.7,2.7,p.color);}ctx.globalAlpha=1;
+    ctx.textAlign='center';for(const l of labels){ctx.globalAlpha=Math.min(1,l.t*3);ctx.font=`800 ${l.big?25:17}px "Segoe UI",sans-serif`;ctx.lineWidth=4;ctx.strokeStyle='#fffef0';ctx.strokeText(l.text,l.x,l.y);ctx.fillStyle='#3b7145';ctx.fillText(l.text,l.x,l.y);}ctx.globalAlpha=1;
+    ctx.strokeStyle='#dde3c7';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(C.left,139);ctx.lineTo(C.left,C.bottom-10);ctx.quadraticCurveTo(C.left,C.bottom,C.left+10,C.bottom);ctx.lineTo(C.right-10,C.bottom);ctx.quadraticCurveTo(C.right,C.bottom,C.right,C.bottom-10);ctx.lineTo(C.right,139);ctx.stroke();ctx.restore();
+  }
+  function frame(now){
+    const elapsed=last?Math.min((now-last)/1000,.05):0;last=now;
+    if(state==='playing'){
+      aim=clamp(aim+((heldRight?1:0)-(heldLeft?1:0))*elapsed*250,C.left+FRUITS[world.current].r,C.right-FRUITS[world.current].r);
+      previewClock+=elapsed;accumulator+=elapsed;let steps=0;while(accumulator>=C.dt&&steps++<7&&state==='playing'){world.step();accumulator-=C.dt;processEvents();}
+      for(const p of particles){p.x+=p.vx*elapsed;p.y+=p.vy*elapsed;p.vy+=180*elapsed;p.t-=elapsed;}particles=particles.filter(p=>p.t>0);
+      for(const l of labels){l.y-=30*elapsed;l.t-=elapsed;}labels=labels.filter(l=>l.t>0);
+    }else accumulator=0;
+    draw();requestAnimationFrame(frame);
+  }
+  function point(e){const rect=canvas.getBoundingClientRect();if(rect.width>0)aim=clamp((e.clientX-rect.left)*C.width/rect.width,C.left+FRUITS[world.current].r,C.right-FRUITS[world.current].r);}
+  canvas.addEventListener('pointermove',e=>{if(state==='playing'&&(pointer===e.pointerId||pointer===null&&e.pointerType==='mouse'))point(e);});
+  canvas.addEventListener('pointerdown',e=>{if(state!=='playing'||pointer!==null||e.button!==0)return;e.preventDefault();canvas.focus({preventScroll:true});pointer=e.pointerId;point(e);try{canvas.setPointerCapture(pointer);}catch{}});
+  canvas.addEventListener('pointerup',e=>{if(pointer!==e.pointerId)return;point(e);releaseInput();drop();});
+  canvas.addEventListener('pointercancel',e=>{if(pointer===e.pointerId)releaseInput();});canvas.addEventListener('lostpointercapture',e=>{if(pointer===e.pointerId)pointer=null;});
+  canvas.addEventListener('keydown',e=>{if(state!=='playing')return;if(['ArrowLeft','ArrowRight',' ','Enter'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft')heldLeft=true;else if(e.key==='ArrowRight')heldRight=true;else if(!e.repeat)drop();}});
+  window.addEventListener('keyup',e=>{if(e.key==='ArrowLeft')heldLeft=false;if(e.key==='ArrowRight')heldRight=false;});canvas.addEventListener('blur',releaseInput);
+  window.addEventListener('keydown',e=>{
+    if(e.key==='Tab'&&state!=='playing'){
+      const buttons=[$('modal-primary'),$('modal-secondary')].filter(b=>!b.hidden);e.preventDefault();let at=buttons.indexOf(document.activeElement);buttons[(at+(e.shiftKey?-1:1)+buttons.length)%buttons.length].focus();return;
+    }
+    if(e.repeat)return;if(e.key==='Escape'||e.key.toLowerCase()==='p'){
+      e.preventDefault();if(state==='playing')showModal('paused');else if(state==='paused')resume();else if(state==='restart'){if(returnState==='paused')showModal('paused');else resume();}
+    }
+  });
+  $('pause').addEventListener('click',()=>{if(state==='playing')showModal('paused');});$('restart').addEventListener('click',()=>{if(state==='playing')showModal('restart');});
+  $('sound').addEventListener('click',()=>{sound=!sound;ensureAudio();updateSound();if(!sound&&audio)audio.suspend().catch(()=>{});});
+  $('modal-primary').addEventListener('click',()=>{ensureAudio();modalAction?.();});$('modal-secondary').addEventListener('click',()=>{if(returnState==='paused')showModal('paused');else resume();});
+  function autoPause(){if(state==='playing')showModal('paused');releaseInput();}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)autoPause();});window.addEventListener('blur',autoPause);
+  for(const f of FRUITS){const row=document.createElement('div');row.className='fruitrow';const icon=document.createElement('canvas');icon.width=70;icon.height=70;icon.setAttribute('aria-hidden','true');fruit(icon.getContext('2d'),f.level,35,39,23);const name=document.createElement('span');name.className='name';name.textContent=f.name;const num=document.createElement('span');num.className='level';num.textContent=String(f.level+1).padStart(2,'0');row.append(icon,name,num);$('evolution').append(row);}
+  updateScore();next();draw();requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
